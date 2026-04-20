@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI ATS System</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            width: 400px;
+            margin: 50px auto;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+        }
+        textarea {
+            width: 100%;
+            height: 80px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>AI Resume ATS</h2>
+
+    <textarea id="resume" placeholder="Enter Resume Text"></textarea>
+    <textarea id="job" placeholder="Enter Job Description"></textarea>
+
+    <button onclick="submitData()">Check Score</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+function submitData() {
+    alert("Button clicked");
+    
+    let resume = document.getElementById("resume").value;
+    let job = document.getElementById("job").value;
+
+    fetch("http://127.0.0.1:8000/ats-score", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body:JSON.stringify({
+            name:"test",
+            email:"test@gmail.com",
+            resume_text:resume,
+            job_description:job
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("result").innerHTML =
+            "Score: " + data.score + "<br>Result: " + data.stage;
+    })
+    .catch(error => {
+        document.getElementById("result").innerHTML = "Error connecting to backend";
+    });
+}
+</script>
+
+</body>
+</html>
